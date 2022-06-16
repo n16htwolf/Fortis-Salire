@@ -27,10 +27,18 @@ public class backToBase : MonoBehaviour
             Vector3 _randomBaseSpot = new Vector3(_base.position.x + Random.Range(-1*_distanceFromBase, _distanceFromBase),0f, _base.position.z + Random.Range(-1*_distanceFromBase, _distanceFromBase));
             float _randomTimeToMove = Random.Range(6f,25f);
             _navMeshAgent.SetDestination(_randomBaseSpot);
+            FaceTarget(_randomBaseSpot);
             yield return new WaitForSeconds(_randomTimeToMove);
         }
         
         
+    }
+
+    private void FaceTarget(Vector3 randomBaseSpot)
+    {
+        Vector3 direction = (randomBaseSpot - transform.position).normalized;
+        Quaternion lookRotation = Quaternion.LookRotation(new Vector3(direction.x, 0, direction.z));
+        transform.rotation = Quaternion.Slerp(transform.rotation, lookRotation,Time.deltaTime * 10f);
     }
 }
 
